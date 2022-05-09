@@ -16,7 +16,21 @@
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
-    
+
+    <h3>Welcome to the book library</h3>
+    <div class="mainContainer">
+      <button onclick="addBookToLibrary()">Add a new book</button>
+    </div>
+    <div class="add_book_popup" style="display:flex;">
+      <div class="add_book_form">
+        <label for = 'b-title'>Title</label>
+        <input id="b-title" placeholder="Title">
+        <label for = 'b-author'>Title</label>
+        <input id="b-author" placeholder="Author">
+      </div>
+    </div>
+
+
     <script src="main.js" async defer></script>
   </body>
 </html>
