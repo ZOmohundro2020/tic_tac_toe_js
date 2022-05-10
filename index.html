@@ -10,23 +10,29 @@
     <title>Book Library</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="">
+    <link rel="stylesheet" href="main.css">
   </head>
   <body>
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
-    <h3>Welcome to the book library</h3>
+    
     <div class="mainContainer">
+      <h3>Welcome to the book library</h3>
       <button onclick="addBookToLibrary()">Add a new book</button>
     </div>
-    <div class="add_book_popup" style="display:flex;">
-      <div class="add_book_form">
+    <div class="add_book_popup book_popup_hidden">
+      <span class="book_form_close"><button onclick="closeBookPopup()">X</button></span>
+      <div class="add_book_form">        
         <label for = 'b-title'>Title</label>
         <input id="b-title" placeholder="Title">
-        <label for = 'b-author'>Title</label>
+        <label for = 'b-author'>Author</label>
         <input id="b-author" placeholder="Author">
+        <label for = 'b-pages'>Number of Pages</label>
+        <input id="b-pages" placeholder="Pages">
+        <label for = 'b-read'>Has been read?</label>
+        <input style ="display: inline;" id="b-read" type="checkbox">
       </div>
     </div>
 
