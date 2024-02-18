@@ -24,7 +24,7 @@
     </div>
     <div class="add_book_popup book_popup_hidden">
       <span class="book_form_close"><button onclick="closeBookPopup()">X</button></span>
-      <div class="add_book_form">        
+      <form id="bookForm" class="add_book_form">
         <label for = 'b-title'>Title</label>
         <input id="b-title" placeholder="Title">
         <label for = 'b-author'>Author</label>
@@ -33,7 +33,8 @@
         <input id="b-pages" placeholder="Pages">
         <label for = 'b-read'>Has been read?</label>
         <input style ="display: inline;" id="b-read" type="checkbox">
-      </div>
+        <button>Add book</button>
+      </form>
     </div>
 
 
