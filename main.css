@@ -6,16 +6,16 @@
 }
 
 body {
-
   -webkit-font-smoothing: antialiased;
 }
 
-body, input, button {
- 
+body,
+input,
+button {
 }
 
 input {
-  display:block;
+  display: block;
 }
 
 button {
@@ -36,12 +36,11 @@ button {
 .add_book_form {
   display: block;
   padding: 1em;
-
 }
 
 .add_book_form input {
-  margin-top: .1em;
-  margin-bottom: .1em;  
+  margin-top: 0.1em;
+  margin-bottom: 0.1em;
 }
 
 .book_form_close {
@@ -51,10 +50,18 @@ button {
 }
 
 .book_form_close button {
-    
 }
 
 .book_popup_hidden {
   display: none;
 }
 
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  border-radius: 5px;
+}
+
+.container {
+  padding: 2px 16px;
+}

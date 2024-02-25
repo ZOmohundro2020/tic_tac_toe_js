@@ -2,14 +2,9 @@ const book_popup = document.querySelector(".add_book_popup");
 const book_popup_close = document.querySelector("book_form_close");
 const bookForm = document.getElementById("bookForm");
 const bookFormElements = bookForm.elements;
+const libraryDiv = document.getElementById("library");
 
-//play with this
-// const fd = new FormData(event.target);
-// let inputFieldData = fd.get("cityInput");
-
-// if (inputFieldData.trim().length < 1) {
-//   return;
-// }
+let myLibrary = [];
 
 bookForm.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -25,11 +20,9 @@ bookForm.addEventListener("submit", (event) => {
     pages: bPages,
     read: bRead,
   });
-  myLibrary.push(book);
-  console.log(myLibrary);
+  myLibrary.push(book);  
+  displayLibrary();
 });
-
-let myLibrary = [];
 
 function Book({ title, author, pages, read }) {
   this.title = title;
@@ -44,4 +37,45 @@ function addBookToLibrary() {
 
 function closeBookPopup() {
   book_popup.classList.add("book_popup_hidden");
+}
+
+function displayLibrary() {
+  // clear existing node
+  function empty(element) {
+    while (element.firstElementChild) {
+      element.firstElementChild.remove();
+    }    
+  }
+  empty(libraryDiv);  
+
+  myLibrary.map((book) => {
+    const hasRead = book.read ? "Yes" : "No";
+
+    const newCardDiv = document.createElement("div");
+    newCardDiv.className = "card";
+
+    const newContainerDiv = document.createElement("div");
+    newContainerDiv.className = "container";
+
+    const newTitle = document.createElement("h4");
+    newTitle.textContent = book.title;
+
+    const newAuthor = document.createElement("p");
+    newAuthor.textContent = book.author;
+
+    const newPages = document.createElement("p");
+    newPages.textContent = `${book.pages} pages`;
+
+    const newHasRead = document.createElement("p");
+    newHasRead.textContent = `Has been read: ${hasRead}`;
+
+    newContainerDiv.appendChild(newTitle);
+    newContainerDiv.appendChild(newAuthor);
+    newContainerDiv.appendChild(newPages);
+    newContainerDiv.appendChild(newHasRead);
+
+    newCardDiv.appendChild(newContainerDiv);
+
+    libraryDiv.appendChild(newCardDiv);
+  });
 }
