@@ -5,38 +5,46 @@
 <!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
 <html>
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>Book Library</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="main.css">
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="main.css" />
   </head>
   <body>
     <!--[if lt IE 7]>
-      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+      <p class="browsehappy">
+        You are using an <strong>outdated</strong> browser. Please
+        <a href="#">upgrade your browser</a> to improve your experience.
+      </p>
     <![endif]-->
 
-    
     <div class="mainContainer">
       <h3>Welcome to the book library</h3>
       <button onclick="addBookToLibrary()">Add a new book</button>
     </div>
     <div class="add_book_popup book_popup_hidden">
-      <span class="book_form_close"><button onclick="closeBookPopup()">X</button></span>
+      <span class="book_form_close"
+        ><button onclick="closeBookPopup()">X</button></span
+      >
       <form id="bookForm" class="add_book_form">
-        <label for = 'b-title'>Title</label>
-        <input id="b-title" placeholder="Title">
-        <label for = 'b-author'>Author</label>
-        <input id="b-author" placeholder="Author">
-        <label for = 'b-pages'>Number of Pages</label>
-        <input id="b-pages" placeholder="Pages">
-        <label for = 'b-read'>Has been read?</label>
-        <input style ="display: inline;" id="b-read" type="checkbox">
+        <label for="b-title">Title</label>
+        <input id="b-title" name="b-title" placeholder="Title" />
+        <label for="b-author">Author</label>
+        <input id="b-author" name="b-author" placeholder="Author" />
+        <label for="b-pages">Number of Pages</label>
+        <input id="b-pages" name="b-pages" placeholder="Pages" />
+        <label for="b-read">Has been read?</label>
+        <input
+          style="display: inline"
+          id="b-read"
+          name="b-read"
+          type="checkbox"
+        />
         <button>Add book</button>
       </form>
     </div>
-
 
     <script src="main.js" async defer></script>
   </body>
