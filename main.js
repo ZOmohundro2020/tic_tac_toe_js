@@ -21,6 +21,11 @@ bookForm.addEventListener("submit", (event) => {
     read: bRead,
   });
   myLibrary.push(book);
+
+  // get the index of the item we just added to library array and assign it as dataId
+  let newIndex = myLibrary.indexOf(book);
+  myLibrary[newIndex].dataId = newIndex;
+
   displayLibrary();
 });
 
@@ -31,8 +36,15 @@ function Book({ title, author, pages, read }) {
   this.read = read;
 }
 
-function addBookToLibrary() {
+function addBookToLibraryPopup() {
   book_popup.classList.remove("book_popup_hidden");
+}
+
+function deleteBook(book) {
+  //receives the book object and then filters the existing library array
+  filteredLibrary = myLibrary.filter((el) => el.dataId !== book.dataId);
+  myLibrary = filteredLibrary;
+  displayLibrary();
 }
 
 function closeBookPopup() {
@@ -52,8 +64,7 @@ function displayLibrary() {
     const hasRead = book.read ? "Yes" : "Not yet";
 
     const newCardDiv = document.createElement("div");
-    newCardDiv.className = "card";
-    newCardDiv.dataset.id = `${book.title}${book.author}${book.pages}`;
+    newCardDiv.className = "card";    
 
     const newContainerDiv = document.createElement("div");
     newContainerDiv.className = "container";
@@ -61,6 +72,9 @@ function displayLibrary() {
     const newCardClose = document.createElement("button");
     newCardClose.className = "buttonClose";
     newCardClose.textContent = "X";
+    newCardClose.onclick = () => {
+      deleteBook(book);
+    };
     newContainerDiv.appendChild(newCardClose);
 
     const newTitle = document.createElement("h4");
