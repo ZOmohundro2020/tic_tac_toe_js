@@ -20,7 +20,7 @@ bookForm.addEventListener("submit", (event) => {
     pages: bPages,
     read: bRead,
   });
-  myLibrary.push(book);  
+  myLibrary.push(book);
   displayLibrary();
 });
 
@@ -44,18 +44,24 @@ function displayLibrary() {
   function empty(element) {
     while (element.firstElementChild) {
       element.firstElementChild.remove();
-    }    
+    }
   }
-  empty(libraryDiv);  
+  empty(libraryDiv);
 
   myLibrary.map((book) => {
-    const hasRead = book.read ? "Yes" : "No";
+    const hasRead = book.read ? "Yes" : "Not yet";
 
     const newCardDiv = document.createElement("div");
     newCardDiv.className = "card";
+    newCardDiv.dataset.id = `${book.title}${book.author}${book.pages}`;
 
     const newContainerDiv = document.createElement("div");
     newContainerDiv.className = "container";
+
+    const newCardClose = document.createElement("button");
+    newCardClose.className = "buttonClose";
+    newCardClose.textContent = "X";
+    newContainerDiv.appendChild(newCardClose);
 
     const newTitle = document.createElement("h4");
     newTitle.textContent = book.title;
