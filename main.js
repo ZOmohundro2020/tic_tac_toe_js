@@ -51,8 +51,6 @@ function deleteBook(book) {
 }
 
 function toggleReadStatus(book) {
-  console.log("toggle read status");
-  console.log(book);
   book.toggleRead();
   displayLibrary();
 }
@@ -110,7 +108,7 @@ function displayLibrary() {
     newContainerDiv.appendChild(newAuthor);
     newContainerDiv.appendChild(newPages);
     newContainerDiv.appendChild(newHasRead);
-    newContainerDiv.appendChild(newReadToggle);
+    newHasRead.appendChild(newReadToggle);
 
     newCardDiv.appendChild(newContainerDiv);
 
