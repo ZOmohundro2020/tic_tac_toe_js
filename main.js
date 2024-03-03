@@ -34,6 +34,9 @@ function Book({ title, author, pages, read }) {
   this.author = author;
   this.pages = pages;
   this.read = read;
+  this.toggleRead = () => {
+    this.read ? (this.read = null) : (this.read = true);
+  };
 }
 
 function addBookToLibraryPopup() {
@@ -44,6 +47,13 @@ function deleteBook(book) {
   //receives the book object and then filters the existing library array
   filteredLibrary = myLibrary.filter((el) => el.dataId !== book.dataId);
   myLibrary = filteredLibrary;
+  displayLibrary();
+}
+
+function toggleReadStatus(book) {
+  console.log("toggle read status");
+  console.log(book);
+  book.toggleRead();
   displayLibrary();
 }
 
@@ -64,7 +74,7 @@ function displayLibrary() {
     const hasRead = book.read ? "Yes" : "Not yet";
 
     const newCardDiv = document.createElement("div");
-    newCardDiv.className = "card";    
+    newCardDiv.className = "card";
 
     const newContainerDiv = document.createElement("div");
     newContainerDiv.className = "container";
@@ -89,10 +99,18 @@ function displayLibrary() {
     const newHasRead = document.createElement("p");
     newHasRead.textContent = `Has been read: ${hasRead}`;
 
+    const newReadToggle = document.createElement("button");
+    newReadToggle.className = "buttonReadToggle";
+    newReadToggle.textContent = "Toggle Read Status";
+    newReadToggle.onclick = () => {
+      toggleReadStatus(book);
+    };
+
     newContainerDiv.appendChild(newTitle);
     newContainerDiv.appendChild(newAuthor);
     newContainerDiv.appendChild(newPages);
     newContainerDiv.appendChild(newHasRead);
+    newContainerDiv.appendChild(newReadToggle);
 
     newCardDiv.appendChild(newContainerDiv);
 
