@@ -20,33 +20,6 @@
       </p>
     <![endif]-->
 
-    <div class="mainContainer">
-      <h3>Welcome to the book library</h3>
-      <button onclick="addBookToLibraryPopup()">Add a new book</button>
-    </div>
-    <div class="add_book_popup book_popup_hidden">
-      <span class="book_form_close"
-        ><button onclick="closeBookPopup()">X</button></span
-      >
-      <form id="bookForm" class="add_book_form">
-        <label for="b-title">Title</label>
-        <input id="b-title" name="b-title" placeholder="Title" />
-        <label for="b-author">Author</label>
-        <input id="b-author" name="b-author" placeholder="Author" />
-        <label for="b-pages">Number of Pages</label>
-        <input id="b-pages" name="b-pages" placeholder="Pages" />
-        <label for="b-read">Has been read?</label>
-        <input
-          style="display: inline"
-          id="b-read"
-          name="b-read"
-          type="checkbox"
-        />
-        <button>Add book</button>
-      </form>
-    </div>
-    <div id="library"></div>
-
     <script src="main.js" async defer></script>
   </body>
 </html>
