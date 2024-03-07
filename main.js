@@ -25,51 +25,34 @@ function GameControl() {
   const players = [PlayerX, PlayerY];
   board.currentBoard();
 
-  const turnControl = function () {
-    // determine active player
-    const determineActivePlayer = function () {
-      let activePlayer;
-      players.map((player) => {
-        if (player.activePlayer) {
-          activePlayer = player;
-        }
-      });
-
-      console.log("activePlayer is: ", activePlayer);
-      return activePlayer;
-    };
-
-    const toggleActivePlayer = function () {
-      players.map((player) => (player.activePlayer = !player.activePlayer));
-      console.log("players array is now: ", players);
-    };
-
-    // flow control
-    activePlayer = determineActivePlayer();
-
-    //sample first turn
-    function turn() {
-      console.log(
-        `It is ${activePlayer.playerName}'s turn and they are playing as ${activePlayer.playerPiece} `
-      );
-      let ask = prompt("Enter Row,Col coordinates");
-      [x, y] = ask.split(",");
-      board.placePiece(x - 1, y - 1, activePlayer.playerPiece);
-      //board.currentBoard();
-      //toggleActivePlayer();
-      //console.log("after first turn: ", activePlayer.playerName);
-    }
-
-    // --- TO DO: Fix active player logic.
-
-    while (gameActive) {
-      turn();
-      board.currentBoard();
-      toggleActivePlayer();
-    }
+  const determineActivePlayer = function () {
+    let activePlayer;
+    players.map((player) => {
+      if (player.activePlayer) {
+        activePlayer = player;
+      }
+    });
+    return activePlayer;
   };
 
-  turnControl();
+  const toggleActivePlayer = function () {
+    players.map((player) => (player.activePlayer = !player.activePlayer));
+  };
+
+  function turn() {
+    activePlayer = determineActivePlayer();
+    console.log(
+      `It is ${activePlayer.playerName}'s turn and they are playing as ${activePlayer.playerPiece} `
+    );
+    let ask = prompt("Enter Row,Col coordinates");
+    [x, y] = ask.split(",");
+    board.placePiece(x - 1, y - 1, activePlayer.playerPiece);
+  }
+  while (gameActive) {
+    turn();
+    board.currentBoard();
+    toggleActivePlayer();
+  }
 }
 
 GameControl();
