@@ -4,9 +4,20 @@ function GameBoard() {
     ["-", "-", "-"],
     ["-", "-", "-"],
   ];
+  const isOccupied = (row, col) => {
+    if (gameBoard[row][col] !== "-") {
+      console.log("occupied");
+      return true;
+    }
+  };
   const placePiece = (row, col, piece) => {
     console.log("row, col, piece", row, col, piece);
-    gameBoard[row][col] = piece;
+    if (!isOccupied(row, col)) {
+      gameBoard[row][col] = piece;
+      return true;
+    } else {
+      return false;
+    }
   };
   const currentBoard = () => console.log(JSON.stringify(gameBoard)); // for development so we can trust console.log more
   return { gameBoard, placePiece, currentBoard };
@@ -17,7 +28,7 @@ function Player(playerName, playerPiece, activePlayer = false) {
 }
 
 function GameControl() {
-  // game setup
+  // -- Setup -- //
   let gameActive = true;
   const board = GameBoard();
   const PlayerX = Player("Bob", "X", true);
@@ -44,9 +55,15 @@ function GameControl() {
     console.log(
       `It is ${activePlayer.playerName}'s turn and they are playing as ${activePlayer.playerPiece} `
     );
-    let ask = prompt("Enter Row,Col coordinates");
-    [x, y] = ask.split(",");
-    board.placePiece(x - 1, y - 1, activePlayer.playerPiece);
+    while (true) {
+      const [x, y] = prompt("Enter Row,Col coordinates").split(",");
+      legalMove = board.placePiece(x - 1, y - 1, activePlayer.playerPiece); 
+      if (legalMove) {
+        break;
+      } else {
+        console.log("That is not a legal move, please try again");
+      }
+    }
   }
   while (gameActive) {
     turn();
