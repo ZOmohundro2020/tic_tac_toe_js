@@ -61,7 +61,23 @@ function GameBoard() {
   };
 
   const currentBoard = () => console.log(JSON.stringify(gameBoard)); // for development so we can trust console.log more
-  return { gameBoard, placePiece, currentBoard, checkVictory };
+
+  const displayHTML = () => {
+    const gameContainer = document.getElementById("gameContainer");
+    gameContainer.innerHTML = "";
+    const parentDiv = document.createElement("div");
+    parentDiv.classList.add("parent");
+    gameBoard.flat().map((el) => {
+            
+      // create a new div, fill it with current array, give it identifier, attach it to dom
+      let newDiv = document.createElement("div");
+      newDiv.textContent = el;
+      parentDiv.appendChild(newDiv);
+    });
+    gameContainer.appendChild(parentDiv);
+  };
+
+  return { gameBoard, placePiece, currentBoard, checkVictory, displayHTML };
 }
 
 function Player(playerName, playerPiece, activePlayer = false) {
@@ -76,6 +92,7 @@ function GameControl() {
   const PlayerY = Player("Jim", "O");
   const players = [PlayerX, PlayerY];
   board.currentBoard();
+  board.displayHTML();
 
   const determineActivePlayer = function () {
     let activePlayer;
@@ -110,6 +127,7 @@ function GameControl() {
   while (gameActive) {
     turn();
     board.currentBoard();
+    board.displayHTML();
     if (board.checkVictory()) {
       break;
     }
