@@ -67,11 +67,12 @@ function GameBoard() {
     gameContainer.innerHTML = "";
     const parentDiv = document.createElement("div");
     parentDiv.classList.add("parent");
-    gameBoard.flat().map((el) => {
-            
+    gameBoard.flat().map((el, index) => {
       // create a new div, fill it with current array, give it identifier, attach it to dom
       let newDiv = document.createElement("div");
       newDiv.textContent = el;
+      newDiv.setAttribute("id", `cell${index + 1}`);
+      newDiv.addEventListener("click", () => console.log(`clicked ${newDiv.id}`));
       parentDiv.appendChild(newDiv);
     });
     gameContainer.appendChild(parentDiv);
