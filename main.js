@@ -1,11 +1,14 @@
 function GameBoard() {
-  let gameBoard = [
-    ["-", "-", "-"],
-    ["-", "-", "-"],
-    ["-", "-", "-"],
-  ];
+  let gameBoard = ["-", "-", "-", "-", "-", "-", "-", "-", "-"];
   const isOccupied = (row, col) => {
     if (gameBoard[row][col] !== "-") {
+      console.log("occupied");
+      return true;
+    }
+  };
+  const isOccupiedTwo = (cell) => {
+    console.log("isOccupiedTwo:", gameBoard[cell]);
+    if (gameBoard[cell] !== "-") {
       console.log("occupied");
       return true;
     }
@@ -14,6 +17,17 @@ function GameBoard() {
     console.log("row, col, piece", row, col, piece);
     if (!isOccupied(row, col)) {
       gameBoard[row][col] = piece;
+      return true;
+    } else {
+      return false;
+    }
+  };
+  const placePieceTwo = (cell, piece) => {
+    console.log("cell, piece:", cell, piece);
+    if (!isOccupiedTwo(cell)) {
+      console.log("made it here");
+      gameBoard[cell] = piece;
+
       return true;
     } else {
       return false;
@@ -71,11 +85,20 @@ function GameBoard() {
       // create a new div, fill it with current array, give it identifier, attach it to dom
       let newDiv = document.createElement("div");
       newDiv.textContent = el;
-      newDiv.setAttribute("id", `cell${index + 1}`);
-      newDiv.addEventListener("click", () => console.log(`clicked ${newDiv.id}`));
+      newDiv.setAttribute("id", `cell${index}`);
+      newDiv.addEventListener("click", () => handleClick(newDiv.id));
+      //console.log(`clicked ${newDiv.id}`)
+      //);
       parentDiv.appendChild(newDiv);
     });
     gameContainer.appendChild(parentDiv);
+  };
+
+  const handleClick = (cell) => {
+    //placePieceTwo(cell[4], GameControl.determineActivePlayer()); // temp hardcoded piece
+    placePieceTwo(cell[4], "X"); // temp hardcoded piece
+    displayHTML();
+    //console.log(cell);
   };
 
   return { gameBoard, placePiece, currentBoard, checkVictory, displayHTML };
@@ -98,6 +121,7 @@ function GameControl() {
   const determineActivePlayer = function () {
     let activePlayer;
     players.map((player) => {
+      // do I need map?
       if (player.activePlayer) {
         activePlayer = player;
       }
@@ -106,7 +130,7 @@ function GameControl() {
   };
 
   const toggleActivePlayer = function () {
-    players.map((player) => (player.activePlayer = !player.activePlayer));
+    players.map((player) => (player.activePlayer = !player.activePlayer)); // do I need map?
   };
 
   function turn() {
@@ -114,29 +138,32 @@ function GameControl() {
     console.log(
       `It is ${activePlayer.playerName}'s turn and they are playing as ${activePlayer.playerPiece} `
     );
-    while (true) {
-      const [x, y] = prompt("Enter Row,Col coordinates").split(",");
-      legalMove = board.placePiece(x - 1, y - 1, activePlayer.playerPiece);
-      if (legalMove) {
-        break;
-      } else {
-        console.log("That is not a legal move, please try again");
-      }
-    }
+    // while (true) {
+    //   const [x, y] = prompt("Enter Row,Col coordinates").split(",");
+    //   legalMove = board.placePiece(x - 1, y - 1, activePlayer.playerPiece);
+    //   if (legalMove) {
+    //     break;
+    //   } else {
+    //     console.log("That is not a legal move, please try again");
+    //   }
+    // }
   }
 
-  while (gameActive) {
-    turn();
-    board.currentBoard();
-    board.displayHTML();
-    if (board.checkVictory()) {
-      break;
-    }
-    toggleActivePlayer();
-  }
-  console.log("made it here");
-  window.alert("test");
-  gameActive = false;
+  turn();
+
+  // while (gameActive) {
+  //   board.currentBoard();
+  //   board.displayHTML();
+  //   turn();
+  //   if (board.checkVictory()) {
+  //     break;
+  //   }
+  //   toggleActivePlayer();
+  // }
+  // console.log("made it here");
+  // window.alert("test");
+  // gameActive = false;
+  return { determineActivePlayer };
 }
 
 GameControl();
