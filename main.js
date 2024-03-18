@@ -1,5 +1,8 @@
 function GameBoard() {
   let gameBoard = ["-", "-", "-", "-", "-", "-", "-", "-", "-"];
+
+  const getBoard = () => gameBoard;
+
   const isOccupied = (row, col) => {
     if (gameBoard[row][col] !== "-") {
       console.log("occupied");
@@ -25,7 +28,7 @@ function GameBoard() {
   const placePieceTwo = (cell, piece) => {
     console.log("cell, piece:", cell, piece);
     if (!isOccupiedTwo(cell)) {
-      console.log("made it here");
+      console.log("in placePieceTwo");
       gameBoard[cell] = piece;
 
       return true;
@@ -76,32 +79,7 @@ function GameBoard() {
 
   const currentBoard = () => console.log(JSON.stringify(gameBoard)); // for development so we can trust console.log more
 
-  const displayHTML = () => {
-    const gameContainer = document.getElementById("gameContainer");
-    gameContainer.innerHTML = "";
-    const parentDiv = document.createElement("div");
-    parentDiv.classList.add("parent");
-    gameBoard.flat().map((el, index) => {
-      // create a new div, fill it with current array, give it identifier, attach it to dom
-      let newDiv = document.createElement("div");
-      newDiv.textContent = el;
-      newDiv.setAttribute("id", `cell${index}`);
-      newDiv.addEventListener("click", () => handleClick(newDiv.id));
-      //console.log(`clicked ${newDiv.id}`)
-      //);
-      parentDiv.appendChild(newDiv);
-    });
-    gameContainer.appendChild(parentDiv);
-  };
-
-  const handleClick = (cell) => {
-    //placePieceTwo(cell[4], GameControl.determineActivePlayer()); // temp hardcoded piece
-    placePieceTwo(cell[4], "X"); // temp hardcoded piece
-    displayHTML();
-    //console.log(cell);
-  };
-
-  return { gameBoard, placePiece, currentBoard, checkVictory, displayHTML };
+  return { getBoard, placePiece, placePieceTwo, currentBoard, checkVictory};
 }
 
 function Player(playerName, playerPiece, activePlayer = false) {
@@ -116,7 +94,7 @@ function GameControl() {
   const PlayerY = Player("Jim", "O");
   const players = [PlayerX, PlayerY];
   board.currentBoard();
-  board.displayHTML();
+  //board.displayHTML();
 
   const determineActivePlayer = function () {
     let activePlayer;
@@ -163,7 +141,43 @@ function GameControl() {
   // console.log("made it here");
   // window.alert("test");
   // gameActive = false;
-  return { determineActivePlayer };
+  return { determineActivePlayer, toggleActivePlayer };
 }
 
-GameControl();
+function ViewController() {
+  const game = GameControl();
+  const gameBoard = GameBoard();
+  const displayHTML = () => {
+    const gameContainer = document.getElementById("gameContainer");
+    gameContainer.innerHTML = "";
+    const parentDiv = document.createElement("div");
+    parentDiv.classList.add("parent");
+    gameBoard.getBoard().flat().map((el, index) => {
+      // create a new div, fill it with current array, give it identifier, attach it to dom
+      let newDiv = document.createElement("div");
+      newDiv.textContent = el;
+      newDiv.setAttribute("id", `cell${index}`);
+      newDiv.addEventListener("click", () => handleClick(newDiv.id));
+      //console.log(`clicked ${newDiv.id}`)
+      //);
+      parentDiv.appendChild(newDiv);
+    });
+    gameContainer.appendChild(parentDiv);
+  };
+
+  const handleClick = (cell) => {
+    console.log("in handleClick");
+    console.log(game.determineActivePlayer());
+    gameBoard.placePieceTwo(cell[4], game.determineActivePlayer().playerPiece);
+    // probably move handle click to game control anyway?
+    //placePieceTwo(cell[4], "X"); // temp hardcoded piece
+    displayHTML();
+    game.toggleActivePlayer();
+    //console.log(GameControl().toggleActivePlayer);
+
+    //console.log(cell);
+  };
+  displayHTML();
+}
+ViewController();
+//GameControl();
