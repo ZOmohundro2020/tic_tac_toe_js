@@ -19,7 +19,7 @@ button {
 }
 
 .parent {
-  margin: auto;
+  margin: auto;  
   /* width: 50%; */
   /* border: 3px solid green; */
   padding: 10px;
@@ -35,4 +35,5 @@ button {
   align-items: center;
   border: 2px solid black;
   font-size: 3em;
+  cursor: pointer;
 }
