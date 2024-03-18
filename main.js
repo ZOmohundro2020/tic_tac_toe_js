@@ -4,14 +4,13 @@ function GameBoard() {
   const getBoard = () => gameBoard;
 
   const isOccupied = (cell) => {
-    console.log("isOccupied:", gameBoard[cell]);
     if (gameBoard[cell] !== "-") {
       console.log("occupied");
       return true;
     }
   };
   const placePiece = (cell, piece) => {
-    console.log("cell, piece:", cell, piece);
+    console.log({ cell, piece });
     if (!isOccupied(cell)) {
       console.log("in placePiece");
       gameBoard[cell] = piece;
@@ -113,9 +112,14 @@ function ViewController() {
 
   const handleClick = (cell) => {
     console.log("active player:", game.determineActivePlayer());
-    gameBoard.placePiece(cell[4], game.determineActivePlayer().playerPiece);
-    displayHTML();
-    game.toggleActivePlayer();
+    const legalMove = gameBoard.placePiece(
+      cell[4],
+      game.determineActivePlayer().playerPiece
+    );    
+    if (legalMove) {
+      displayHTML();
+      game.toggleActivePlayer();
+    }
   };
   displayHTML();
 }
