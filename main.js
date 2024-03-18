@@ -1,18 +1,16 @@
 function GameBoard() {
-  let gameBoard = ["-", "-", "-", "-", "-", "-", "-", "-", "-"];
+  let gameBoard = ["", "", "", "", "", "", "", "", ""];
 
   const getBoard = () => gameBoard;
 
   const isOccupied = (cell) => {
-    if (gameBoard[cell] !== "-") {
-      console.log("occupied");
+    if (gameBoard[cell] !== "") {
       return true;
     }
   };
   const placePiece = (cell, piece) => {
     console.log({ cell, piece });
     if (!isOccupied(cell)) {
-      console.log("in placePiece");
       gameBoard[cell] = piece;
 
       return true;
@@ -24,7 +22,7 @@ function GameBoard() {
   const checkVictory = () => {
     for (let i = 0; i < 3; i++) {
       if (
-        gameBoard[i][0] !== "-" &&
+        gameBoard[i][0] !== "" &&
         gameBoard[i][0] === gameBoard[i][1] &&
         gameBoard[i][1] === gameBoard[i][2]
       ) {
@@ -35,7 +33,7 @@ function GameBoard() {
 
     for (let i = 0; i < 3; i++) {
       if (
-        gameBoard[0][i] !== "-" &&
+        gameBoard[0][i] !== "" &&
         gameBoard[0][i] === gameBoard[1][i] &&
         gameBoard[1][i] === gameBoard[2][i]
       ) {
@@ -45,7 +43,7 @@ function GameBoard() {
     }
 
     if (
-      gameBoard[0][0] !== "-" &&
+      gameBoard[0][0] !== "" &&
       gameBoard[0][0] === gameBoard[1][1] &&
       gameBoard[1][1] === gameBoard[2][2]
     ) {
@@ -53,7 +51,7 @@ function GameBoard() {
       return true;
     }
     if (
-      gameBoard[0][2] !== "-" &&
+      gameBoard[0][2] !== "" &&
       gameBoard[0][2] === gameBoard[1][1] &&
       gameBoard[1][1] === gameBoard[2][0]
     ) {
@@ -95,7 +93,7 @@ function GameControl() {
 function ViewController() {
   const game = GameControl();
   const gameBoard = GameBoard();
-  const displayHTML = () => {
+  const displayBoard = () => {
     const gameContainer = document.getElementById("gameContainer");
     gameContainer.innerHTML = "";
     const parentDiv = document.createElement("div");
@@ -109,18 +107,29 @@ function ViewController() {
     });
     gameContainer.appendChild(parentDiv);
   };
+  const displayPlayerTurn = () => {
+    const activePlayer = game.determineActivePlayer();
+    const playerInfo = document.getElementById("playerInfo");
+    const playerText = `It is ${activePlayer.playerName}'s turn and they are playing ${activePlayer.playerPiece}`;
+    playerInfo.innerHTML = "";
+    const playerInfoPara = document.createElement("p");
+    playerInfoPara.textContent = playerText;
+    playerInfo.appendChild(playerInfoPara);
+  };
 
   const handleClick = (cell) => {
     console.log("active player:", game.determineActivePlayer());
     const legalMove = gameBoard.placePiece(
       cell[4],
       game.determineActivePlayer().playerPiece
-    );    
+    );
     if (legalMove) {
-      displayHTML();
+      displayBoard();
       game.toggleActivePlayer();
+      displayPlayerTurn();
     }
   };
-  displayHTML();
+  displayBoard();
+  displayPlayerTurn();
 }
 ViewController();
