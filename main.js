@@ -8,8 +8,7 @@ function GameBoard() {
       return true;
     }
   };
-  const placePiece = (cell, piece) => {
-    console.log({ cell, piece });
+  const placePiece = (cell, piece) => {    
     if (!isOccupied(cell)) {
       gameBoard[cell] = piece;
 
@@ -18,49 +17,44 @@ function GameBoard() {
       return false;
     }
   };
-  // To Do: Rework this
-  const checkVictory = () => {
-    for (let i = 0; i < 3; i++) {
-      if (
-        gameBoard[i][0] !== "" &&
-        gameBoard[i][0] === gameBoard[i][1] &&
-        gameBoard[i][1] === gameBoard[i][2]
-      ) {
-        console.log("victory row");
-        return true;
-      }
-    }
 
-    for (let i = 0; i < 3; i++) {
-      if (
-        gameBoard[0][i] !== "" &&
-        gameBoard[0][i] === gameBoard[1][i] &&
-        gameBoard[1][i] === gameBoard[2][i]
-      ) {
-        console.log("victory col");
-        return true;
+  const checkVictory = (activePlayerPiece) => {
+    let gameWon = false;
+    const winningArrays = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6],
+    ];
+    const victoryArray = [];
+    const includesAll = (arr, values) => values.every((v) => arr.includes(v));
+    gameBoard.map((cell, index) => {
+      if (cell === activePlayerPiece) {
+        victoryArray.push(index);
       }
-    }
+    });    
 
-    if (
-      gameBoard[0][0] !== "" &&
-      gameBoard[0][0] === gameBoard[1][1] &&
-      gameBoard[1][1] === gameBoard[2][2]
-    ) {
-      console.log("victory diag");
-      return true;
-    }
-    if (
-      gameBoard[0][2] !== "" &&
-      gameBoard[0][2] === gameBoard[1][1] &&
-      gameBoard[1][1] === gameBoard[2][0]
-    ) {
-      console.log("victory diag");
+    winningArrays.map((possWin) => {
+      if (includesAll(victoryArray, possWin)) {
+        console.log("win match");
+        gameWon = true;
+      }
+    });
+
+    return gameWon;    
+  };
+
+  const checkTie = () => {
+    if (!gameBoard.includes("")) {
       return true;
     }
   };
 
-  return { getBoard, placePiece, checkVictory };
+  return { getBoard, placePiece, checkVictory, checkTie };
 }
 
 function Player(playerName, playerPiece, activePlayer = false) {
@@ -102,6 +96,7 @@ function ViewController() {
       let newDiv = document.createElement("div");
       newDiv.textContent = el;
       newDiv.setAttribute("id", `cell${index}`);
+      newDiv.setAttribute("class", "cell");
       newDiv.addEventListener("click", () => handleClick(newDiv.id));
       parentDiv.appendChild(newDiv);
     });
@@ -118,15 +113,24 @@ function ViewController() {
   };
 
   const handleClick = (cell) => {
-    console.log("active player:", game.determineActivePlayer());
-    const legalMove = gameBoard.placePiece(
-      cell[4],
-      game.determineActivePlayer().playerPiece
-    );
+    const activePlayer = game.determineActivePlayer();
+    console.log("active player:", activePlayer);
+    const legalMove = gameBoard.placePiece(cell[4], activePlayer.playerPiece);
     if (legalMove) {
       displayBoard();
-      game.toggleActivePlayer();
-      displayPlayerTurn();
+      const playerHasWon = gameBoard.checkVictory(activePlayer.playerPiece);
+      const gameHasTied = gameBoard.checkTie();
+      if (playerHasWon) {
+        console.log("game over");
+        // add game cleanup
+      }
+      if (gameHasTied) {
+        console.log("game tied");
+        // add game cleanup
+      } else {
+        game.toggleActivePlayer();
+        displayPlayerTurn();
+      }
     }
   };
   displayBoard();
