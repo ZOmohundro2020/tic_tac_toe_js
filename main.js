@@ -8,7 +8,7 @@ function GameBoard() {
       return true;
     }
   };
-  const placePiece = (cell, piece) => {    
+  const placePiece = (cell, piece) => {
     if (!isOccupied(cell)) {
       gameBoard[cell] = piece;
 
@@ -36,7 +36,7 @@ function GameBoard() {
       if (cell === activePlayerPiece) {
         victoryArray.push(index);
       }
-    });    
+    });
 
     winningArrays.map((possWin) => {
       if (includesAll(victoryArray, possWin)) {
@@ -45,7 +45,7 @@ function GameBoard() {
       }
     });
 
-    return gameWon;    
+    return gameWon;
   };
 
   const checkTie = () => {
@@ -102,16 +102,21 @@ function ViewController() {
     });
     gameContainer.appendChild(parentDiv);
   };
-  const displayPlayerTurn = () => {
+  const displayPlayerTurn = (gameOver = false) => {
+    let playerText = "";
     const activePlayer = game.determineActivePlayer();
     const playerInfo = document.getElementById("playerInfo");
-    const playerText = `It is ${activePlayer.playerName}'s turn and they are playing ${activePlayer.playerPiece}`;
+    gameOver
+      ? (playerText = `Game Over. ${activePlayer.playerName} wins!`)
+      : (playerText = `It is ${activePlayer.playerName}'s turn and they are playing ${activePlayer.playerPiece}`);
     playerInfo.innerHTML = "";
     const playerInfoPara = document.createElement("p");
     playerInfoPara.textContent = playerText;
     playerInfo.appendChild(playerInfoPara);
   };
 
+  // to do: work more with end game display. need to pass if it's a win or a tie (not just a win).
+  // could probably pass active player too instead of recalcuating?
   const handleClick = (cell) => {
     const activePlayer = game.determineActivePlayer();
     console.log("active player:", activePlayer);
@@ -123,14 +128,13 @@ function ViewController() {
       if (playerHasWon) {
         console.log("game over");
         // add game cleanup
-      }
-      if (gameHasTied) {
+      } else if (gameHasTied) {
         console.log("game tied");
         // add game cleanup
       } else {
         game.toggleActivePlayer();
-        displayPlayerTurn();
       }
+      displayPlayerTurn(playerHasWon);
     }
   };
   displayBoard();
