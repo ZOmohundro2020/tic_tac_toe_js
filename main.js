@@ -2,6 +2,7 @@ function GameBoard() {
   let gameBoard = ["", "", "", "", "", "", "", "", ""];
 
   const getBoard = () => gameBoard;
+  let turnCount = 0;
 
   const isOccupied = (cell) => {
     if (gameBoard[cell] !== "") {
@@ -11,12 +12,17 @@ function GameBoard() {
   const placePiece = (cell, piece) => {
     if (!isOccupied(cell)) {
       gameBoard[cell] = piece;
+      incTurnCount();
+      console.log("turn count: ", turnCount);
 
       return true;
     } else {
       return false;
     }
   };
+
+  const incTurnCount = () => turnCount++;
+  const getTurnCount = () => turnCount;
 
   const checkVictory = (activePlayerPiece) => {
     let gameWon = false;
@@ -54,7 +60,7 @@ function GameBoard() {
     }
   };
 
-  return { getBoard, placePiece, checkVictory, checkTie };
+  return { getBoard, placePiece, checkVictory, checkTie, getTurnCount };
 }
 
 function Player(playerName, playerPiece, activePlayer = false) {
@@ -87,6 +93,7 @@ function GameControl() {
 function ViewController() {
   const game = GameControl();
   const gameBoard = GameBoard();
+  let activePlayer = game.determineActivePlayer();
   const displayBoard = () => {
     const gameContainer = document.getElementById("gameContainer");
     gameContainer.innerHTML = "";
@@ -104,10 +111,12 @@ function ViewController() {
   };
   const displayPlayerTurn = (gameOver = false) => {
     let playerText = "";
-    const activePlayer = game.determineActivePlayer();
+    const turnCount = gameBoard.getTurnCount();
     const playerInfo = document.getElementById("playerInfo");
     gameOver
       ? (playerText = `Game Over. ${activePlayer.playerName} wins!`)
+      : turnCount === 9
+      ? (playerText = "Game Over. It's a tie!")
       : (playerText = `It is ${activePlayer.playerName}'s turn and they are playing ${activePlayer.playerPiece}`);
     playerInfo.innerHTML = "";
     const playerInfoPara = document.createElement("p");
@@ -115,10 +124,7 @@ function ViewController() {
     playerInfo.appendChild(playerInfoPara);
   };
 
-  // to do: work more with end game display. need to pass if it's a win or a tie (not just a win).
-  // could probably pass active player too instead of recalcuating?
   const handleClick = (cell) => {
-    const activePlayer = game.determineActivePlayer();
     console.log("active player:", activePlayer);
     const legalMove = gameBoard.placePiece(cell[4], activePlayer.playerPiece);
     if (legalMove) {
@@ -133,6 +139,7 @@ function ViewController() {
         // add game cleanup
       } else {
         game.toggleActivePlayer();
+        activePlayer = game.determineActivePlayer();
       }
       displayPlayerTurn(playerHasWon);
     }
