@@ -46,7 +46,8 @@ function GameBoard() {
   const getTurnCount = () => turnCount;
 
   const checkVictory = (activePlayerPiece) => {
-    let gameWon = false;
+    let playerHasWon = false;
+    let winningCells = [];
     const winningArrays = [
       [0, 1, 2],
       [3, 4, 5],
@@ -67,12 +68,13 @@ function GameBoard() {
 
     winningArrays.map((possWin) => {
       if (includesAll(victoryArray, possWin)) {
-        console.log("win match");
-        gameWon = true;
+        console.log("win match", possWin);
+        playerHasWon = true;
+        winningCells = possWin;
       }
     });
 
-    return gameWon;
+    return { playerHasWon, winningCells };
   };
 
   const checkTie = () => {
@@ -145,15 +147,34 @@ function ViewController() {
     playerInfo.appendChild(playerInfoPara);
   };
 
+  const displayVictory = (winningCells) => {
+    console.log("in displayVictory");
+    console.log('winning arrays at 0',winningCells[0]);
+    const cells = document.getElementsByClassName("cell");
+    for (let i = 0; i < cells.length; i++) {
+      console.log(cells[i].id[4]);
+      if (+cells[i].id[4] === winningCells[0]) {
+        // to do: loop through winning array and assign a class to winning cell.
+        console.log("working");
+      }
+    }
+  };
+
   const handleClick = (cell) => {
     console.log("active player:", activePlayer);
     const legalMove = gameBoard.placePiece(cell[4], activePlayer.playerPiece);
     if (legalMove) {
       displayBoard();
-      const playerHasWon = gameBoard.checkVictory(activePlayer.playerPiece);
+      console.log(gameBoard.checkVictory(activePlayer.playerPiece));
+      const { playerHasWon, winningCells } = gameBoard.checkVictory(
+        activePlayer.playerPiece
+      );
+      console.log("playerHasWon: ", playerHasWon);
+      console.log("winning cells: ", winningCells);
       const gameHasTied = gameBoard.checkTie();
       if (playerHasWon) {
         console.log("game over");
+        displayVictory(winningCells);
         // add game cleanup
       } else if (gameHasTied) {
         console.log("game tied");
