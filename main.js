@@ -67,8 +67,7 @@ function GameBoard() {
     });
 
     winningArrays.map((possWin) => {
-      if (includesAll(victoryArray, possWin)) {
-        console.log("win match", possWin);
+      if (includesAll(victoryArray, possWin)) {        
         playerHasWon = true;
         winningCells = possWin;
       }
@@ -148,14 +147,12 @@ function ViewController() {
   };
 
   const displayVictory = (winningCells) => {
-    console.log("in displayVictory");
-    console.log('winning arrays at 0',winningCells[0]);
     const cells = document.getElementsByClassName("cell");
     for (let i = 0; i < cells.length; i++) {
-      console.log(cells[i].id[4]);
-      if (+cells[i].id[4] === winningCells[0]) {
-        // to do: loop through winning array and assign a class to winning cell.
-        console.log("working");
+      for (let j = 0; j < winningCells.length; j++) {
+        if (+cells[i].id[4] === winningCells[j]) {
+          cells[i].classList.add("winningCell");
+        }
       }
     }
   };
@@ -168,9 +165,7 @@ function ViewController() {
       console.log(gameBoard.checkVictory(activePlayer.playerPiece));
       const { playerHasWon, winningCells } = gameBoard.checkVictory(
         activePlayer.playerPiece
-      );
-      console.log("playerHasWon: ", playerHasWon);
-      console.log("winning cells: ", winningCells);
+      );            
       const gameHasTied = gameBoard.checkTie();
       if (playerHasWon) {
         console.log("game over");

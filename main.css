@@ -38,6 +38,10 @@ button {
   cursor: pointer;
 }
 
+.winningCell {
+  background-color: rgb(129, 252, 199);
+}
+
 /* Modal styles */
 .modal {
   display: flex;
