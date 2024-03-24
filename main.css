@@ -19,7 +19,7 @@ button {
 }
 
 .parent {
-  margin: auto;  
+  margin: auto;
   /* width: 50%; */
   /* border: 3px solid green; */
   padding: 10px;
@@ -40,6 +40,18 @@ button {
 
 .winningCell {
   background-color: rgb(129, 252, 199);
+}
+
+.controlButtons {
+  margin: auto;
+  display: flex;
+  gap: 5px;
+  max-width: 306px;
+}
+
+.controlButtons button {
+  flex: 1;
+  padding: 5px;
 }
 
 /* Modal styles */
