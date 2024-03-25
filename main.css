@@ -47,6 +47,7 @@ button {
   display: flex;
   gap: 5px;
   max-width: 306px;
+  padding-top: 3px;
 }
 
 .controlButtons button {
@@ -77,6 +78,7 @@ button {
 
   .modal-content {
     background: #fff;
+    border-style: solid;
     border-radius: 5px;
     max-width: 600px;
     position: fixed;
@@ -88,6 +90,7 @@ button {
   .modal-header {
     display: flex;
     justify-content: space-between;
+    gap: 8px;
     align-items: center;
     border-bottom: 1px solid #ccc;
     padding: 1.5rem;
@@ -104,6 +107,16 @@ button {
         color: #000;
       }
     }
+
+    button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  .modal-title {
+    font-size: 1.1em;
   }
 
   .modal-body {
@@ -111,9 +124,19 @@ button {
   }
 
   .modal-footer {
+    display: flex;
     border-top: 1px solid #ccc;
     padding: 1rem;
-    text-align: right;
+    /* text-align: right; */
+  }
+
+  .modal-footer button {
+    align-items: center;
+    justify-content: center;
+    display: flex;    
+    flex: 1;
+    margin: auto .3em;
+    
   }
 
   &.visible {
@@ -121,7 +144,12 @@ button {
     visibility: visible;
 
     .modal-content {
-      top: 25%;
+      top: 7.5%;
     }
+  }
+
+  .nameInput {
+    text-align: center;
+    margin-top: .3em;
   }
 }
