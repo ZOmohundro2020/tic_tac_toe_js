@@ -72,9 +72,22 @@ function GameControl() {
   // -- Setup -- //
   let playerName1 = "BobX";
   let playerName2 = "JimO";
+
+  const getPlayerName = () => {
+    return {
+      playerName1,
+      playerName2,
+    };
+  };
+
   const PlayerX = Player(playerName1, "X", true);
   const PlayerY = Player(playerName2, "O");
   const players = [PlayerX, PlayerY];
+
+  const updatePlayerNames = (newName1, newName2) => {
+    PlayerX.playerName = newName1;
+    PlayerY.playerName = newName2;
+  };
 
   const determineActivePlayer = function () {
     let activePlayer;
@@ -90,23 +103,11 @@ function GameControl() {
     players.map((player) => (player.activePlayer = !player.activePlayer));
   };
 
-  const getPlayerName = () => {
-    return {
-      playerName1,
-      playerName2,
-    };
-  };
-
-  const setPlayerName = (name1, name2) => {
-    playerName1 = name1;
-    playerName2 = name2;
-  };
-
   return {
     determineActivePlayer,
     toggleActivePlayer,
     getPlayerName,
-    setPlayerName,
+    updatePlayerNames,
   };
 }
 
@@ -183,6 +184,43 @@ function ViewController() {
   };
   displayBoard();
   displayPlayerTurn();
+
+  // Modal
+  const openModalButtons = document.querySelectorAll(".open-modal"),
+    modal = document.querySelector(".modal"),
+    closeModalButtons = document.querySelectorAll(".close-modal");
+
+  openModalButtons.forEach((openBtn) => {
+    openBtn.addEventListener("click", openModal);
+  });
+
+  closeModalButtons.forEach((closeBtn) => {
+    closeBtn.addEventListener("click", closeModal);
+  });
+
+  function openModal() {
+    modal.classList.add("visible");
+  }
+
+  function closeModal() {
+    modal.classList.remove("visible");
+  }
+
+  const playerNames = GameControl().getPlayerName();
+  const nameInputDiv = document.getElementById("nameInput");
+  const playerName1Input = document.getElementById("playerName1");
+  const playerName2Input = document.getElementById("playerName2");
+
+  playerName1Input.setAttribute("value", playerNames.playerName1);
+  playerName2Input.setAttribute("value", playerNames.playerName2);
+
+  const modalOkButton = document.getElementById("modalOk");
+  modalOkButton.addEventListener("click", () => modalOkHandler());
+
+  const modalOkHandler = () => {
+    game.updatePlayerNames(playerName1Input.value, playerName2Input.value);
+    displayPlayerTurn(); //TO DO: Odd display if player changes names after game won.
+  };
 }
 
 // Restart
@@ -191,42 +229,7 @@ const restartButton = document.getElementById("restart");
 restartButton.addEventListener("click", () => handleRestart());
 const handleRestart = () => ViewController();
 
-// Modal
-const openModalButtons = document.querySelectorAll(".open-modal"),
-  modal = document.querySelector(".modal"),
-  closeModalButtons = document.querySelectorAll(".close-modal");
-
-openModalButtons.forEach((openBtn) => {
-  openBtn.addEventListener("click", openModal);
-});
-
-closeModalButtons.forEach((closeBtn) => {
-  closeBtn.addEventListener("click", closeModal);
-});
-
-function openModal() {
-  modal.classList.add("visible");
-}
-
-function closeModal() {
-  modal.classList.remove("visible");
-}
-
-// populate modal body
-//to do: keep working here. need to interact with existing input forms.
-
-const playerNames = GameControl().getPlayerName();
-const nameInputDiv = document.getElementById("nameInput");
-const playerName1Input = document.getElementById("playerName1");
-const playerName2Input = document.getElementById("playerName2");
-
-playerName1Input.setAttribute("value",playerNames.playerName1);
-playerName2Input.setAttribute("value",playerNames.playerName2);
-
-
-//const nameInputPara = document.createElement("p");
-//nameInputPara.textContent = `Player 1: ${playerNames.playerName1}`;
-//nameInputDiv.appendChild(nameInputPara);
+// TO DO: Resetting clears out player names.
 
 // Initial Start
 ViewController();
