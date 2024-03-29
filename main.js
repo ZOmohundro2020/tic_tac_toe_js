@@ -4,6 +4,10 @@ function GameBoard() {
   const getBoard = () => gameBoard;
   let turnCount = 0;
 
+  const clearBoard = () => {
+    gameBoard = ["", "", "", "", "", "", "", "", ""];
+  };
+
   const isOccupied = (cell) => {
     if (gameBoard[cell] !== "") {
       return true;
@@ -23,6 +27,7 @@ function GameBoard() {
 
   const incTurnCount = () => turnCount++;
   const getTurnCount = () => turnCount;
+  const resetTurnCount = () => (turnCount = 0);
 
   const checkVictory = (activePlayerPiece) => {
     let playerHasWon = false;
@@ -61,7 +66,15 @@ function GameBoard() {
     }
   };
 
-  return { getBoard, placePiece, checkVictory, checkTie, getTurnCount };
+  return {
+    getBoard,
+    clearBoard,
+    placePiece,
+    checkVictory,
+    checkTie,
+    getTurnCount,
+    resetTurnCount,
+  };
 }
 
 function Player(playerName, playerPiece, activePlayer = false) {
@@ -73,20 +86,31 @@ function GameControl() {
   let playerName1 = "BobX";
   let playerName2 = "JimO";
 
-  const getPlayerName = () => {
+  const getPlayerNames = () => {
     return {
       playerName1,
       playerName2,
     };
   };
 
-  const PlayerX = Player(playerName1, "X", true);
-  const PlayerY = Player(playerName2, "O");
-  const players = [PlayerX, PlayerY];
+  const Player1 = Player(playerName1, "X", true);
+  const Player2 = Player(playerName2, "O");
+  const players = [Player1, Player2];
 
   const updatePlayerNames = (newName1, newName2) => {
-    PlayerX.playerName = newName1;
-    PlayerY.playerName = newName2;
+    Player1.playerName = newName1;
+    Player2.playerName = newName2;
+  };
+
+  const resetActivePlayer = () => {
+    Player1.activePlayer = true;
+    Player2.activePlayer = false;
+    console.log(
+      "inside resetActivePlayer",
+      Player1.activePlayer,
+      Player2.activePlayer
+    );
+    return Player1;
   };
 
   const determineActivePlayer = function () {
@@ -96,6 +120,7 @@ function GameControl() {
         activePlayer = player;
       }
     });
+    console.log("in determineActivePlayer, activePlayer is:", activePlayer);
     return activePlayer;
   };
 
@@ -106,7 +131,8 @@ function GameControl() {
   return {
     determineActivePlayer,
     toggleActivePlayer,
-    getPlayerName,
+    resetActivePlayer,
+    getPlayerNames,
     updatePlayerNames,
   };
 }
@@ -159,11 +185,9 @@ function ViewController() {
   };
 
   const handleClick = (cell) => {
-    console.log("active player:", activePlayer);
     const legalMove = gameBoard.placePiece(cell[4], activePlayer.playerPiece);
     if (legalMove) {
       displayBoard();
-      console.log(gameBoard.checkVictory(activePlayer.playerPiece));
       const { playerHasWon, winningCells } = gameBoard.checkVictory(
         activePlayer.playerPiece
       );
@@ -206,8 +230,7 @@ function ViewController() {
     modal.classList.remove("visible");
   }
 
-  const playerNames = GameControl().getPlayerName();
-  const nameInputDiv = document.getElementById("nameInput");
+  const playerNames = GameControl().getPlayerNames();
   const playerName1Input = document.getElementById("playerName1");
   const playerName2Input = document.getElementById("playerName2");
 
@@ -221,15 +244,20 @@ function ViewController() {
     game.updatePlayerNames(playerName1Input.value, playerName2Input.value);
     displayPlayerTurn(); //TO DO: Odd display if player changes names after game won.
   };
+  // Restart
+
+  const restartButton = document.getElementById("restart");
+  restartButton.addEventListener("click", () => handleRestart());
+  const handleRestart = () => {
+    gameBoard.clearBoard();
+    gameBoard.resetTurnCount();
+    activePlayer = game.resetActivePlayer();
+    displayBoard();
+    displayPlayerTurn();
+  };
+
+  // TO DO: Resetting clears out player names.
 }
-
-// Restart
-
-const restartButton = document.getElementById("restart");
-restartButton.addEventListener("click", () => handleRestart());
-const handleRestart = () => ViewController();
-
-// TO DO: Resetting clears out player names.
 
 // Initial Start
 ViewController();
