@@ -17,8 +17,6 @@ function GameBoard() {
     if (!isOccupied(cell)) {
       gameBoard[cell] = piece;
       incTurnCount();
-      console.log("turn count: ", turnCount);
-
       return true;
     } else {
       return false;
@@ -83,8 +81,8 @@ function Player(playerName, playerPiece, activePlayer = false) {
 
 function GameControl() {
   // -- Setup -- //
-  let playerName1 = "BobX";
-  let playerName2 = "JimO";
+  let playerName1 = "Player 1";
+  let playerName2 = "Player 2";
 
   const getPlayerNames = () => {
     return {
@@ -120,7 +118,6 @@ function GameControl() {
         activePlayer = player;
       }
     });
-    console.log("in determineActivePlayer, activePlayer is:", activePlayer);
     return activePlayer;
   };
 
@@ -152,7 +149,11 @@ function ViewController() {
       newDiv.textContent = el;
       newDiv.setAttribute("id", `cell${index}`);
       newDiv.setAttribute("class", "cell");
-      newDiv.addEventListener("click", () => handleClick(newDiv.id));
+      newDiv.addEventListener(
+        "click",
+        (newDiv.fn = () => handleClick(newDiv.id))
+      );
+
       parentDiv.appendChild(newDiv);
     });
     gameContainer.appendChild(parentDiv);
@@ -193,12 +194,10 @@ function ViewController() {
       );
       const gameHasTied = gameBoard.checkTie();
       if (playerHasWon) {
-        console.log("game over");
         displayVictory(winningCells);
-        // add game cleanup
+        gameEnd();
       } else if (gameHasTied) {
-        console.log("game tied");
-        // add game cleanup
+        gameEnd();
       } else {
         game.toggleActivePlayer();
         activePlayer = game.determineActivePlayer();
@@ -208,6 +207,13 @@ function ViewController() {
   };
   displayBoard();
   displayPlayerTurn();
+
+  const gameEnd = () => {
+    const cells = document.querySelectorAll(".cell");
+    cells.forEach((cell) => {
+      cell.removeEventListener("click", cell.fn);
+    });
+  };
 
   // Modal
   const openModalButtons = document.querySelectorAll(".open-modal"),
@@ -230,22 +236,18 @@ function ViewController() {
     modal.classList.remove("visible");
   }
 
-  const playerNames = GameControl().getPlayerNames();
+  const { playerName1, playerName2 } = GameControl().getPlayerNames();
   const playerName1Input = document.getElementById("playerName1");
   const playerName2Input = document.getElementById("playerName2");
 
-  playerName1Input.setAttribute("value", playerNames.playerName1);
-  playerName2Input.setAttribute("value", playerNames.playerName2);
+  playerName1Input.value = playerName1;
+  playerName2Input.value = playerName2;
 
-  const modalOkButton = document.getElementById("modalOk");
-  modalOkButton.addEventListener("click", () => modalOkHandler());
-
-  const modalOkHandler = () => {
+  document.getElementById("modalOk").addEventListener("click", () => {
     game.updatePlayerNames(playerName1Input.value, playerName2Input.value);
-    displayPlayerTurn(); //TO DO: Odd display if player changes names after game won.
-  };
-  // Restart
+  });
 
+  // Restart
   const restartButton = document.getElementById("restart");
   restartButton.addEventListener("click", () => handleRestart());
   const handleRestart = () => {
@@ -255,8 +257,6 @@ function ViewController() {
     displayBoard();
     displayPlayerTurn();
   };
-
-  // TO DO: Resetting clears out player names.
 }
 
 // Initial Start
