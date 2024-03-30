@@ -103,11 +103,6 @@ function GameControl() {
   const resetActivePlayer = () => {
     Player1.activePlayer = true;
     Player2.activePlayer = false;
-    console.log(
-      "inside resetActivePlayer",
-      Player1.activePlayer,
-      Player2.activePlayer
-    );
     return Player1;
   };
 
@@ -205,8 +200,6 @@ function ViewController() {
       displayPlayerTurn(playerHasWon);
     }
   };
-  displayBoard();
-  displayPlayerTurn();
 
   const gameEnd = () => {
     const cells = document.querySelectorAll(".cell");
@@ -243,8 +236,17 @@ function ViewController() {
   playerName1Input.value = playerName1;
   playerName2Input.value = playerName2;
 
+  playerName1Input.addEventListener("click", () => {
+    playerName1Input.select();
+  });
+
+  playerName2Input.addEventListener("click", () => {
+    playerName2Input.select();
+  });
+
   document.getElementById("modalOk").addEventListener("click", () => {
     game.updatePlayerNames(playerName1Input.value, playerName2Input.value);
+    displayPlayerTurn();
   });
 
   // Restart
@@ -257,6 +259,9 @@ function ViewController() {
     displayBoard();
     displayPlayerTurn();
   };
+
+  displayBoard();
+  displayPlayerTurn();
 }
 
 // Initial Start
